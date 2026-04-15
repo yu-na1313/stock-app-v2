@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import {
-  BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer,
-  ScatterChart, Scatter, CartesianGrid, ReferenceLine, Cell
+  BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell
 } from "recharts";
 import { createClient } from "@supabase/supabase-js";
 
@@ -219,6 +218,7 @@ function ChartUploader({ label, url, onUpload, onDelete, uploading }) {
   );
 }
 function Toast({ msg, onDone }) {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => { const t = setTimeout(onDone, 2200); return () => clearTimeout(t); }, []);
   return <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50 bg-emerald-600 text-white px-5 py-2.5 rounded-xl shadow-lg text-sm font-medium">✅ {msg}</div>;
 }
