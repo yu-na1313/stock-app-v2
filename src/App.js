@@ -363,9 +363,11 @@ export default function App() {
   };
 
   const watching = studies.filter(s => s.status === "watching").length;
-  const filtStudies = listFilter !== null
-    ? studies.filter(s => { const r = calcRisePct(s.startPrice, s.highPrice); return r !== null && parseFloat(r) >= listFilter; })
-    : studies;
+  const [statusFilter, setStatusFilter] = useState("all");
+
+  const filtStudies = studies
+    .filter(s => statusFilter === "all" ? true : statusFilter === "watching" ? s.status === "watching" : s.status === "recorded")
+    .filter(s => listFilter !== null ? (() => { const r = calcRisePct(s.startPrice, s.highPrice); return r !== null && parseFloat(r) >= listFilter; })() : true);
 
   const NBtn = ({ p, label, badge }) => (
     <button onClick={() => setPage(p)} className={`relative px-3 py-2 rounded-lg text-sm font-medium transition-colors ${page === p ? "bg-indigo-600 text-white" : "bg-gray-800 text-gray-300 hover:bg-gray-700"}`}>
@@ -491,10 +493,17 @@ export default function App() {
         {/* ====== 一覧ページ ====== */}
         {page === "list" && (
           <div className="space-y-4">
-            <div className="flex items-center justify-between flex-wrap gap-2">
-              <h2 className="text-base font-semibold">一覧 ({filtStudies.length}件)</h2>
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <h2 className="text-base font-semibold">一覧 ({filtStudies.length}件)</h2>
+              </div>
+              <div className="flex gap-1.5">
+                {[["all", "すべて"], ["watching", "観察中"], ["recorded", "記録済"]].map(([val, label]) => (
+                  <button key={val} onClick={() => setStatusFilter(val)} className={`text-xs px-3 py-1 rounded-full font-medium transition-colors ${statusFilter === val ? "bg-indigo-600 text-white" : "bg-gray-800 text-gray-400 hover:bg-gray-700"}`}>{label}</button>
+                ))}
+              </div>
               <div className="flex flex-wrap gap-1.5">
-                <FBtn val={null} label="すべて" />
+                <FBtn val={null} label="上昇率：すべて" />
                 {RISE_FILTERS.slice(1).map(f => <FBtn key={f.label} val={f.min} label={f.label} />)}
               </div>
             </div>
