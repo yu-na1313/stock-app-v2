@@ -518,7 +518,7 @@ export default function App() {
                     </div>
                     <div className="flex items-center gap-2">
                       <RiseBadge pct={rise} />
-                      <button onClick={e => { e.stopPropagation(); handleDelete(s.id); }} className="text-xs text-gray-600 hover:text-rose-400 px-1">✕</button>
+                      <button onClick={e => { e.stopPropagation(); if (window.confirm(`${s.ticker}を削除しますか？`)) handleDelete(s.id); }} className="text-xs text-gray-600 hover:text-rose-400 px-1">✕</button>
                     </div>
                   </div>
                 );
